@@ -15,7 +15,7 @@
 Плагин должен быть полноценным модулем в формате npm, самостоятельно реализующим свои зависимости от других модулей.
 Роутингом для плагина является имя каталога (для плагинов в режиме разработчика), или имя файла без расширения.
 
-Каждый плагин запускается в отдельном процессе. Способ запуска, передаваемые плагину аргументы и его стандартные потоки процесса плагина можно задавать в поле `process` в [package.json](#packagejson).
+Каждый плагин запускается в отдельном процессе. Способ запуска, передаваемые плагину аргументы и стандартные потоки процесса плагина можно задавать в поле `process` в [package.json](#packagejson).
 Перед запуском процесса плагина монитор:
 
 * проверяет наличие файлов обновлений для плагина и, если они есть, обновляет плагин (см. [обновление](#Обновление))
@@ -28,8 +28,7 @@
 * проверяет наличие обязательных для запуска плагина лицензий
 * создаёт сокет, на который будут переправляться запросы, предназначенные плагину. Если плагин должен обрабатывать http запросы, переадресуемые ему монитором, его экземпляр `http.Server` должен слушать этот сокет
 * создаёт виртуальный каталог, использующий базу plugins.dbs с роутингом, соответствующим правилам роутинга для плагина (см. [настройка виртуального каталога](#Настройка-виртуального-каталога))
-
-После запуска процесса с плагином монитор инициализирует в глобальной области видимости объект [`global.KServerApi`](#api).
+* инициализирует в глобальной области видимости объект [`global.KServerApi`](#api).
 
 ## **package.json**
 
@@ -43,8 +42,8 @@
 * `cmd`     \<String\> строка с командой запуска процесса плагина
 * `args`    \<Array\> массив строк, передаваемых как аргументы команде запуска процесса плагина
 * `stdin`   \<String\> путь к файлу, представляющему поток ввода для процесса плагина
-* `stdout`  \<String\> путь к файлу, представляющему поток ввода для процесса плагина
-* `stderr`  \<String\> путь к файлу, представляющему поток ввода для процесса плагина
+* `stdout`  \<String\> путь к файлу, представляющему поток вывода для процесса плагина
+* `stderr`  \<String\> путь к файлу, представляющему поток ошибок для процесса плагина
 
 Для команды, указанной в `cmd`, путь считается относительно каталога установки ПК.
 Для файлов, указанных в полях `stdin`, `stdout`, `stderr`, путь считается относительно каталога логов плагина (см. [KServerApi, поле LogsPath](Содержимое-объекта-globalkserverapi))
@@ -97,7 +96,7 @@ GET /arm/status?name=test
 
 ## **Настройка виртуального каталога**
 
-При инициализации плагина монитор проверяет наличие и тип виртуального каталога, соответствующего роутингу плагина. Если такого каталога нет, он создаётся и ему выставляется тип "Использовать базу `plugins.dbs`".
+При инициализации плагина монитор проверяет наличие и тип виртуального каталога, соответствующего роутингу плагина. Если такого каталога нет, он создаётся и ему выставляется тип `Использовать базу *plugins.dbs*`.
 В настройках этого виртуального каталога настраиваются права доступа пользователей к плагину, а также предпочтительный виртуальный каталог для плагина (не обязательно).
 
 ## **Обновление**
@@ -105,10 +104,11 @@ GET /arm/status?name=test
 Если при запуске монитор находит обновление для плагина, он
 
 * проверяет, является ли обновление корректным плагином (если не является, следующие шаги пропускаются)
-* останавливает плагин
+* останавливает процесс плагина, переводит его роутинг в служебное состояние
 * переименовывает файл с текущей версией плагина, меняя ему расширение на текущую дату в формате ДД-ММ-ГГГГ
 * переименовывает файл с обновлением плагина в соответствующее плагину имя
 * запускает процесс плагина, проводя все необходимые проверки и инициализации (см. [описание](#Описание))
+* восстанавливает роутинг запросов к плагину в рабочее состояние
 
 Во время работы ПК может получить обновление для плагина из служебной базы. В этом случае файлы обновления выгружаются в каталог с плагинами и инициируется обновление плагина по представленным выше шагам.
 
@@ -120,7 +120,7 @@ GET /arm/status?name=test
 
 Для каждого функционала плагина, который должен быть подвергнут лицензированию и/или разграничению прав доступа, необходимо получить номер лицензии *(у разработчиков kserver'а)*.
 
-Перед тем как разрешить доступ к функционалу для конкретного пользователя код плагина должен проверить разрешен ли пользователю такой доступ с помощью метода [`KServerApi.CheckAccess`](#checkaccessfeatureid-ver-session), передав ему id сессии кодекс-сервера или объекта `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)) *(см. [`pickKServerInfo`](#pickKServerInforequest))*
+Перед тем как разрешить доступ к функционалу для конкретного пользователя код плагина должен проверить разрешен ли пользователю такой доступ с помощью метода [`KServerApi.CheckAccess`](#checkaccessfeatureid-ver-session), передав ему id сессии кодекс-сервера или объекта `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)) *(см. [`pickKServerInfo`](#pickkserverinforequest))*
 
 *Рекомендации разработчикам плагинов:
 Выполнять проверку [`KServerApi.CheckAccess`](#checkaccessfeatureid-ver-session) для каждого запроса может оказаться накладно с точки зрения используемых ресурсов сервера. Что бы снизить нагрузку на систему "кэшировать" ответы [`KServerApi.CheckAccess`](#checkaccessfeatureid-ver-session) используя, например, токен с коротким (1 минута) временем жизни совместно с механизмом сессий.*
@@ -194,7 +194,7 @@ app.get('<some_url>', (req, res) => {
 
 Возвращает информацию о пользователе.
 
-* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickKServerInforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
+* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
 * Returns: \<Promise\>
   Обработчику `resolve` (в случае успеха) передается объект с информацией о пользователе:
   ```nodejs
@@ -232,7 +232,7 @@ global.KServerApi.UserInfo(session)
 
 Возвращает список пользователей.
 
-* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickKServerInforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
+* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
 * Returns: \<Promise\>
   Обработчику `resolve` (в случае успеха) передается массив объектов с информацией о пользователях (может быть пустым):
   ```nodejs
@@ -274,7 +274,7 @@ global.KServerApi.UserList(session)
 * `ver` \<Number\> версия функционала (необязательный параметр, по умолчанию `0`).
     Если в качестве `session` указывается id сессии (`<Number>`), то во избежание
     неоднозначности параметр должен быть указан явно.
-* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickKServerInforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
+* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
 * Returns: \<Promise\>
   Обработчику `resolve` (в случае успеха) передается объект:
 
@@ -313,7 +313,7 @@ app.get('<some_url>', (req, res, next) => {
 Метод не использует (не "захватывает") лицензию, а только проверяет её валидность. (см. *Лицензирование*).
 
 * `featuresIds` \<Array\> массив идентификаторов функционалов и/или пар [<идентификатор функционала>, <версия>], которые должны быть проверены.
-* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickKServerInforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
+* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
 * Returns: \<Promise\>
   Обработчику `resolve` (в случае успеха) передается массив объектов:
   ```nodejs
@@ -492,7 +492,7 @@ app.get('<some_url>', (req, res, next) => {
 Возвращает информацию о документе ИС "Кодекс/Техэксперт".
 
 * `docNum` \<Number\> номер документа в ИС "Кодекс/Техэксперт", информацию о котором требуется получить.
-* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickKServerInforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
+* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
 * Returns: \<Promise\>
   Обработчику `resolve` (в случае успеха) передается объект:
   ```nodejs
@@ -510,7 +510,7 @@ app.get('<some_url>', (req, res, next) => {
 #### **KodeksProductStatus(productId[, session])**
 
 * `productId` \<Number\> идентификатор продукта ИС "Кодекс/Техэксперт".
-* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickKServerInforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
+* `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
 * Returns: \<Promise\>
   Обработчику `resolve` (в случае успеха) передается объект:
   ```nodejs
