@@ -49,7 +49,7 @@
 Для файлов, указанных в полях `stdin`, `stdout`, `stderr`, путь считается относительно каталога логов плагина (см. [KServerApi, поле LogsPath](#Содержимое-объекта-globalkserverapi))
 
 Пример:
-  ```nodejs
+  ```javascript
   ...
   "process": {
       "cmd": "nsh.exe",
@@ -76,19 +76,19 @@
 
 Например, каталог с плагином называется
 
-```nodejs
+```javascript
 arm
 ```
 
 Монитор получил запрос
 
-```nodejs
+```javascript
 GET /arm/status?name=test
 ```
 
 Плагину перенаправляется запрос:
 
-```nodejs
+```javascript
 GET /arm/status?name=test
 ```
 
@@ -139,7 +139,7 @@ GET /arm/status?name=test
 
 Пример:
 
-```nodejs
+```javascript
 app.use((req, res, next) => {
   if (pickKServerInfo)
     pickKServerInfo(req);
@@ -195,9 +195,9 @@ app.get('<some_url>', (req, res) => {
 Возвращает информацию о пользователе.
 
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект с информацией о пользователе:
-  ```nodejs
+  ```javascript
   {
     authenticated: <Boolean>, // флаг, аутентифицирован ли пользователь
     ip: <id_type>, // если пользователь не аутентифицирован - ip-адрес пользователя (IPv4 или IPv6); если аутентифицирован - идентификатор пользователя в базе сервера
@@ -216,7 +216,7 @@ app.get('<some_url>', (req, res) => {
 
 Пример:
 
-```nodejs
+```javascript
 /**
  * @param {string} session
  * @returns {Promise}
@@ -235,7 +235,7 @@ global.KServerApi.UserInfo(session)
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается массив объектов с информацией о пользователях (может быть пустым):
-  ```nodejs
+  ```javascript
   [{
     id: <id_type>, // идентификатор пользователя в базе сервера
     login: <String>`, // логин
@@ -252,7 +252,7 @@ global.KServerApi.UserInfo(session)
 
 Пример:
 
-```nodejs
+```javascript
 /**
  * @param {string} session
  * @returns {Promise}
@@ -278,7 +278,7 @@ global.KServerApi.UserList(session)
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
 
-```nodejs
+```javascript
   {
     granted: <Bolean>, // флаг: доступ разрешен/запрещён
     reason: <String>   // причина отказа (в случае отказа)
@@ -288,7 +288,7 @@ global.KServerApi.UserList(session)
 
 Пример:
 
-  ```nodejs
+  ```javascript
 //...
 app.get('<some_url>', (req, res, next) => {
   KServerApi.CheckAccess(555000, req)
@@ -316,7 +316,7 @@ app.get('<some_url>', (req, res, next) => {
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается массив объектов:
-  ```nodejs
+  ```javascript
   [{
     feature: <Any>,    // id функционала
     granted: <Bolean>, // флаг: доступ разрешен/запрещён
@@ -327,7 +327,7 @@ app.get('<some_url>', (req, res, next) => {
 
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
   Пример:
-  ```nodejs
+  ```javascript
   //...
   KServerApi.PickPermissions([
     [555100000, 0], ['555100000', '1'], 555100001, '555100002'
@@ -355,7 +355,7 @@ app.get('<some_url>', (req, res, next) => {
 * `owner` \<String\> идентификатор владельца
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается \<Boolean\>:
-  ```nodejs
+  ```javascript
   <Bolean>  // true - количество используемых лицензий не превышает максимально допустимое
             // false - превышает, но значение всё равно устанавливается
   ```
@@ -363,7 +363,7 @@ app.get('<some_url>', (req, res, next) => {
 
 Пример:
 
-```nodejs
+```javascript
 //...
 app.get('<some_url>', (req, res, next) => {
   KServerApi.SetLicensedParameter(100002, 0, 50, 123456789)
@@ -392,12 +392,12 @@ app.get('<some_url>', (req, res, next) => {
 * `value` \<Number\> количество лицензий
 * `owner` \<String\> идентификатор владельца
 * Returns: \<Promise\>    
-  Обработчику `resolve` (в случае успеха) передается `true`.
+  Обработчику `resolve` (в случае успеха) передается `true`.    
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
 
 Пример:
 
-```nodejs
+```javascript
 //...
 app.get('<some_url>', (req, res, next) => {
   KServerApi.IncLicensedParameter(100002, 0, 5, 123456789)
@@ -423,14 +423,14 @@ app.get('<some_url>', (req, res, next) => {
 * `version` \<Number\> версия
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается \<Boolean\>:
-  ```nodejs
+  ```javascript
   <Bolean>  // true - не превышает; false - превышает
   ```
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
 
 Пример:
 
-```nodejs
+```javascript
 //...
 app.get('<some_url>', (req, res, next) => {
   KServerApi.CheckLicensedParameter(100002)
@@ -459,14 +459,14 @@ app.get('<some_url>', (req, res, next) => {
 * `version` \<Number\> версия
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается \<Boolean\>:
-  ```nodejs
+  ```javascript
   <Bolean>  // true - лицензия действующая; false - не действующая или отстутствует
   ```
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
 
 Пример:
 
-```nodejs
+```javascript
 //...
 app.get('<some_url>', (req, res, next) => {
   KServerApi.ValidateLicense(100002)
@@ -495,14 +495,14 @@ app.get('<some_url>', (req, res, next) => {
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
-  ```nodejs
+  ```javascript
   {
     status: <String>,  // статус документа
     tooltip: <String>  // наименование документа с дополнительной информацией
   }
   ```
   Свойство `status` может принимать следующие значения:
-   *'active', 'inactive', 'card_active', 'card_inactive', 'card_undefined', 'project', 'project inactive', 'situation', 'situation_inactive', 'themes', 'technicalDocument', 'technicalDocumentNew', 'book', 'bookmark', 'imp_news'*
+   *'active', 'inactive', 'card_active', 'card_inactive', 'card_undefined', 'project', 'project inactive', 'situation', 'situation_inactive', 'themes', 'technicalDocument', 'technicalDocumentNew', 'book', 'bookmark', 'imp_news'*    
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
 
 ***
@@ -513,7 +513,7 @@ app.get('<some_url>', (req, res, next) => {
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
-  ```nodejs
+  ```javascript
   {
     plugged: <Bolean>  // флаг: продукт подключен/не подключен
   }
@@ -533,7 +533,7 @@ app.get('<some_url>', (req, res, next) => {
 * `attachment` \<Array\> массив путей (String) прикрепляемых файлов или `undefined`
 * Returns: \<Promise\>  
   Обработчику `resolve` (в случае успеха) передается значение:
-  ```nodejs
+  ```javascript
   <Bolean>  // статус завершения операции отправки письма
   ```
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
@@ -546,7 +546,7 @@ app.get('<some_url>', (req, res, next) => {
 
 * Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
-  ```nodejs
+  ```javascript
   {
     Port: string,         // порт
     Hostname: string,     // имя хоста
@@ -555,7 +555,7 @@ app.get('<some_url>', (req, res, next) => {
     PreferredVDir: string // предпочтительный виртуальный каталог
   }
   ```
-  Если PreferredVDir не установлен, или во время его получения произошла ошибка, поле будет содержать пустую строку
+  Если PreferredVDir не установлен, или во время его получения произошла ошибка, поле будет содержать пустую строку.    
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
 
 ## **Примеры**
