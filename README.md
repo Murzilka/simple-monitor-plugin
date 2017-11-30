@@ -233,7 +233,7 @@ global.KServerApi.UserInfo(session)
 Возвращает список пользователей.
 
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается массив объектов с информацией о пользователях (может быть пустым):
   ```nodejs
   [{
@@ -275,7 +275,7 @@ global.KServerApi.UserList(session)
     Если в качестве `session` указывается id сессии (`<Number>`), то во избежание
     неоднозначности параметр должен быть указан явно.
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
 
 ```nodejs
@@ -314,7 +314,7 @@ app.get('<some_url>', (req, res, next) => {
 
 * `featuresIds` \<Array\> массив идентификаторов функционалов и/или пар [<идентификатор функционала>, <версия>], которые должны быть проверены.
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)) или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage))
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается массив объектов:
   ```nodejs
   [{
@@ -353,7 +353,7 @@ app.get('<some_url>', (req, res, next) => {
 * `version` \<Number\> версия
 * `value` \<Number\> количество лицензий
 * `owner` \<String\> идентификатор владельца
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается \<Boolean\>:
   ```nodejs
   <Bolean>  // true - количество используемых лицензий не превышает максимально допустимое
@@ -391,7 +391,7 @@ app.get('<some_url>', (req, res, next) => {
 * `version` \<Number\> версия
 * `value` \<Number\> количество лицензий
 * `owner` \<String\> идентификатор владельца
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается `true`.
   Обработчику `reject` (в случае неудачи) передается объект `Error` c описанием ошибки.
 
@@ -421,7 +421,7 @@ app.get('<some_url>', (req, res, next) => {
 
 * `license` \<Number\> номер лицензии
 * `version` \<Number\> версия
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается \<Boolean\>:
   ```nodejs
   <Bolean>  // true - не превышает; false - превышает
@@ -457,7 +457,7 @@ app.get('<some_url>', (req, res, next) => {
 
 * `license` \<Number\> номер лицензии
 * `version` \<Number\> версия
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается \<Boolean\>:
   ```nodejs
   <Bolean>  // true - лицензия действующая; false - не действующая или отстутствует
@@ -493,7 +493,7 @@ app.get('<some_url>', (req, res, next) => {
 
 * `docNum` \<Number\> номер документа в ИС "Кодекс/Техэксперт", информацию о котором требуется получить.
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
   ```nodejs
   {
@@ -511,7 +511,7 @@ app.get('<some_url>', (req, res, next) => {
 
 * `productId` \<Number\> идентификатор продукта ИС "Кодекс/Техэксперт".
 * `session` идентификатор сессии пользователя (см. [`pickKServerInfo`](#pickkserverinforequest)), или объект `request` ([IncomingMessage](https://nodejs.org/dist/v4.4.3/docs/api/http.html#http_class_http_incomingmessage)), или `undefined`
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
   ```nodejs
   {
@@ -544,7 +544,7 @@ app.get('<some_url>', (req, res, next) => {
 
 Получение адреса, порта и виртуального каталога сервера
 
-* Returns: \<Promise\>  
+* Returns: \<Promise\>    
   Обработчику `resolve` (в случае успеха) передается объект:
   ```nodejs
   {
