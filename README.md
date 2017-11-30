@@ -1,4 +1,4 @@
-# Подсистема плагинов для монитора
+# Подсистема плагинов для монитора (актуально для версии 6.4.1.144)
 
 * [Описание](#Описание)
 * [package.json](#packagejson)
@@ -10,7 +10,7 @@
 * [Примеры](#Примеры)
 * [Ссылки](#Ссылки)
 
-## Описание (актуально для монитора версии 6.4.1.144)
+## Описание
 
 Плагин должен быть полноценным модулем в формате npm, самостоятельно реализующим свои зависимости от других модулей.
 Роутингом для плагина является имя каталога (для плагинов в режиме разработчика), или имя файла без расширения.
@@ -96,7 +96,7 @@ GET /arm/status?name=test
 
 ## **Настройка виртуального каталога**
 
-При инициализации плагина монитор проверяет наличие и тип виртуального каталога, соответствующего роутингу плагина. Если такого каталога нет, он создаётся и ему выставляется тип `Использовать базу *plugins.dbs*`.
+При инициализации плагина монитор проверяет наличие и тип виртуального каталога, соответствующего роутингу плагина. Если такого каталога нет, он создаётся и ему выставляется тип `Использовать базу plugins.dbs`.
 В настройках этого виртуального каталога настраиваются права доступа пользователей к плагину, а также предпочтительный виртуальный каталог для плагина (не обязательно).
 
 ## **Обновление**
@@ -177,18 +177,18 @@ app.get('<some_url>', (req, res) => {
 
 ### Методы
 
-[UserInfo](#userinfosession) - метод для получения информации о пользователе
-[UserList](#userlistsession) - метод для получения информации о пользователях
-[CheckAccess](#checkaccessfeatureid-ver-session) - метод для проверки доступа к функционалу
-[PickPermissions](#pickpermissionsfeaturesids-session) - метод для проверки доступа к функционалам
-[SetLicensedParameter](#setlicensedparameterlicense-version-value-owner) - метод для работы с лицензируемыми параметрами
-[IncLicensedParameter](#inclicensedparameterlicense-version-value-owner) - метод для работы с лицензируемыми параметрами
-[CheckLicensedParameter](#checklicensedparameterlicense-version) - метод для работы с лицензируемыми параметрами
-[ValidateLicense](#validatelicenselicense-version) - метод для проверки лицензии (наличие, время действия и т.д.)
-[KodeksDocInfo](#kodeksdocinfodocnum-session) - метод для получения информации о документе ИС "Кодекс/Техэксперт"
-[KodeksProductStatus](#kodeksproductstatusproductid-session) - метод для получения статуса продукта ИС "Кодекс/Техэксперт"
-[SendMail](#sendmailto-subj-body-cc-attachment) - метод для отправки почтового сообщения
-[GetServerInfo](#getserverinfo) - метод для получения адреса, порта и виртуального каталога
+[UserInfo](#userinfosession) - метод для получения информации о пользователе  
+[UserList](#userlistsession) - метод для получения информации о пользователях  
+[CheckAccess](#checkaccessfeatureid-ver-session) - метод для проверки доступа к функционалу  
+[PickPermissions](#pickpermissionsfeaturesids-session) - метод для проверки доступа к функционалам  
+[SetLicensedParameter](#setlicensedparameterlicense-version-value-owner) - метод для работы с лицензируемыми параметрами  
+[IncLicensedParameter](#inclicensedparameterlicense-version-value-owner) - метод для работы с лицензируемыми параметрами  
+[CheckLicensedParameter](#checklicensedparameterlicense-version) - метод для работы с лицензируемыми параметрами  
+[ValidateLicense](#validatelicenselicense-version) - метод для проверки лицензии (наличие, время действия и т.д.)  
+[KodeksDocInfo](#kodeksdocinfodocnum-session) - метод для получения информации о документе ИС "Кодекс/Техэксперт"  
+[KodeksProductStatus](#kodeksproductstatusproductid-session) - метод для получения статуса продукта ИС "Кодекс/Техэксперт"  
+[SendMail](#sendmailto-subj-body-cc-attachment) - метод для отправки почтового сообщения  
+[GetServerInfo](#getserverinfo) - метод для получения адреса, порта и виртуального каталога  
 
 #### **UserInfo(session)**
 
